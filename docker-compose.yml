@@ -1,6 +1,6 @@
 name: application-composed
 
-networks:
+# networks:
   # caddy:
   #   driver: bridge
 
