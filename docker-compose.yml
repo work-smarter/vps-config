@@ -1,8 +1,8 @@
 name: application-composed
 
-# networks:
-  # caddy:
-  #   driver: bridge
+networks:
+  caddy:
+    driver: bridge
 
 services:
 
@@ -18,8 +18,8 @@ services:
       - ./containers/portainer/portainer-data:/data
     expose:
       - 9000:9000
-    # networks:
-    #   - caddy
+    networks:
+      - caddy
 
   caddy:
     image: caddy:latest
@@ -33,8 +33,8 @@ services:
       - ./containers/caddy/site:/srv
       - ./containers/caddy/caddy_data:/data
       - ./containers/caddy/caddy_config:/config
-    # networks:
-    #   - caddy
+    networks:
+      - caddy
 
   # wt-frontend:
   #   image: wt-frontend-web
