@@ -1,0 +1,14 @@
+stylus.alexandru-croitoriu.dev {
+    reverse_proxy localhost:9000
+}
+cv.alexandru-croitoriu.dev {
+    reverse_proxy localhost:9001
+}
+
+jenkins.alexandru-croitoriu.dev {
+    reverse_proxy localhost:8080
+}
+portainer.alexandru-croitoriu.dev {
+    reverse_proxy localhost:9000
+}
+
