@@ -3,16 +3,16 @@ pipeline {
   stages {
     stage('build docker image wt_builder') {
       steps {
-        echo 'Building frontend'
+        echo 'build docker image wt_builder'
         sh 'chmod +x scripts/build_docker_wt_builder.sh'
-        sh 'docker build -t wt_builder -f docker/Dockerfile_wt_builder .'
+        sh 'scripts/build_docker_wt_builder.sh'
       }
     }
     stage('restart caddy server with the new file') {
       steps {
-        echo 'Building frontend'
+        echo 'restart caddy server with the new file'
         sh 'chmod +x scripts/build_docker_wt_base.sh'
-        sh 'docker build -t wt_builder -f docker/Dockerfile_wt_builder .'
+        sh 'scripts/build_docker_wt_base.sh'
       }
     }
   }
