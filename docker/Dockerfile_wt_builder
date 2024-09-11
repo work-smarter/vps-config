@@ -1,0 +1,43 @@
+FROM ubuntu:latest
+
+# install necesary tools
+# sudo apt-get update && sudo apt-get install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
+# apt-get update && apt-get install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
+# sudo apt update && sudo apt install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
+RUN apt-get update 
+RUN apt-get install -y git
+RUN apt-get install -y cmake
+RUN apt-get install -y build-essential 
+RUN apt-get install -y libboost-all-dev 
+RUN apt-get install -y libssl-dev 
+RUN apt-get install -y libcrypto++-dev
+RUN apt-get install -y zeroc-ice-all-dev
+# RUN apt-get install -y libpng-dev
+# RUN apt-get install -y zlib1g-dev 
+
+ 
+# Build step
+# git clone https://github.com/emweb/wt.git wt && cd wt/ && mkdir build && cd build/ && cmake ../ && make && sudo make install
+RUN git clone --branch 4.10-release https://github.com/emweb/wt.git wt 
+RUN cd wt/ && mkdir build
+RUN cd wt/build/ && cmake ../ \
+-DENABLE_SQLITE=ON \
+-DENABLE_POSTGRES=ON \
+-DBUILD_EXAMPLES=OFF \
+-DBUILD_TESTS=OFF \
+-DENABLE_LIBWTTEST=OFF
+# -GNinja \
+# -DCMAKE_CXX_STANDARD=17 \
+# -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+# -DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick \
+# ninja install 
+
+RUN cd wt/build/ && make
+RUN cd wt/build/ && make install
+
+RUN rm -rf wt
+
+RUN cp /usr/local/lib/libwt*.so.* /usr/lib/
+
+
+
