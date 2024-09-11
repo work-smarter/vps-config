@@ -9,7 +9,7 @@ pipeline {
     stage('Restart caddy server with the new file') {
       steps {
         sh 'docker build -t my_caddy -f docker/Dockerfile_caddy .'
-        sh 'docker stop my_caddy'
+        sh 'docker ps -q --filter "name=my_caddy" | xargs -r docker stop'
         sh 'docker rm -f my_caddy || true'
         sh 'docker run -d -p 80:80 -v /var/run/docker.sock:/var/run/docker.sock --name my_caddy my_caddy'
       }
