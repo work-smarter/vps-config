@@ -2,7 +2,7 @@ alexandru-croitoriu.dev {
     file_server
 }
 portainer.alexandru-croitoriu.dev {
-    reverse_proxy localhost:9000
+    reverse_proxy portainer:9000
 }
 
 jenkins.alexandru-croitoriu.dev {
