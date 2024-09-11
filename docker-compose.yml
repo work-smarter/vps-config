@@ -22,7 +22,7 @@ services:
       - caddy
 
   caddy:
-    image: caddy:latest
+    image: caddy:2.8-alpine
     restart: unless-stopped
     container_name: caddy
     ports:
