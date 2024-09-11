@@ -11,8 +11,8 @@ pipeline {
     stage('restart caddy server with the new file') {
       steps {
         echo 'restart caddy server with the new file'
-        sh 'chmod +x scripts/build_docker_wt_base.sh'
-        sh 'scripts/build_docker_wt_base.sh'
+        sh 'chmod +x scripts/create_caddy_image.sh'
+        sh 'scripts/create_caddy_image.sh'
       }
     }
   }
