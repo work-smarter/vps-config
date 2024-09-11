@@ -10,7 +10,7 @@ pipeline {
     stage('restart caddy server with the new file') {
       steps {
         // sh 'chmod +x scripts/create_caddy_image.sh'
-        sh 'docker build -t caddy -f docker/Dockerfile_caddy .'
+        sh 'docker build -t my_caddy -f docker/Dockerfile_caddy .'
       }
     }
   }
