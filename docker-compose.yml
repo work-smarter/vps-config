@@ -28,6 +28,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 2019:2019
     volumes:
       - ./containers/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./containers/caddy/site:/srv
