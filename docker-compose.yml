@@ -38,7 +38,7 @@ services:
       - caddy
 
   jenkins:
-    image: jenkins/jenkins:jdk21
+    image: jenkins-docker:latest
     user: root
     container_name: jenkins
     restart: unless-stopped
@@ -48,6 +48,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./containers/jenkins/jenkins_home:/var/jenkins_home
+    group_add:
+      - ${DOCKER_SOCK_GROUP_ID}
     networks:
       - caddy
   # wt-frontend:
