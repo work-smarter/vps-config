@@ -1,4 +1,4 @@
-name: application-composed
+name: VPS-starter-containers
 
 networks:
   caddy:
