@@ -10,6 +10,6 @@ jenkins.alexandru-croitoriu.dev {
 }
 
 starter.alexandru-croitoriu.dev {
-    reverse_proxy jenkins:9010
+    reverse_proxy wt_starter:9010
 }
 
