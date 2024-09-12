@@ -8,3 +8,8 @@ portainer.alexandru-croitoriu.dev {
 jenkins.alexandru-croitoriu.dev {
     reverse_proxy jenkins:8080
 }
+
+starter.alexandru-croitoriu.dev {
+    reverse_proxy jenkins:9010
+}
+
