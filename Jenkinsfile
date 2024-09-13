@@ -7,5 +7,10 @@ pipeline {
         sh './scripts/build_wt_builder.sh'
       }
     }
+    stage('Re/Deploy docker compose file with caddy, jenkins and portainer') {
+      steps {
+        sh 'docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.yml up -d'
+      }
+    }
   }
 }

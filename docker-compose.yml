@@ -21,21 +21,21 @@ services:
     networks:
       - caddy
 
-  caddy:
-    image: caddy:2.8-alpine
-    restart: unless-stopped
-    container_name: caddy
-    ports:
-      - 80:80
-      - 443:443
-      - 2019:2019
-    volumes:
-      - ./containers/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ./containers/caddy/site:/srv
-      - ./containers/caddy/caddy_data:/data
-      - ./containers/caddy/caddy_config:/config
-    networks:
-      - caddy
+  # caddy:
+  #   image: caddy:2.8-alpine
+  #   restart: unless-stopped
+  #   container_name: caddy
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #     - 2019:2019
+  #   volumes:
+  #     - ./containers/caddy/Caddyfile:/etc/caddy/Caddyfile
+  #     - ./containers/caddy/site:/srv
+  #     - ./containers/caddy/caddy_data:/data
+  #     - ./containers/caddy/caddy_config:/config
+  #   networks:
+  #     - caddy
 
   jenkins:
     image: jenkins-docker:latest
