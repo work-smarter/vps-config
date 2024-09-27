@@ -17,7 +17,6 @@ stylus.alexandru-croitoriu.dev {
     reverse_proxy wt_starter:9020
 }
 
-
 cv.alexandru-croitoriu.dev {
     reverse_proxy wt_starter:9030
 }
