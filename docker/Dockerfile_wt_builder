@@ -1,13 +1,8 @@
 FROM ubuntu:latest
 
-# install necesary tools
-# sudo apt-get update && sudo apt-get install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
-# apt-get update && apt-get install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
-# sudo apt update && sudo apt install -y git cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev 
-
 RUN apt-get update 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -    
 
+# Basic dependencies
 RUN apt-get install -y git
 RUN apt-get install -y cmake
 RUN apt-get install -y build-essential 
@@ -15,12 +10,23 @@ RUN apt-get install -y libboost-all-dev
 RUN apt-get install -y libssl-dev 
 RUN apt-get install -y libcrypto++-dev
 RUN apt-get install -y zeroc-ice-all-dev
+
+# for compiling tailwind classes
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -    
 RUN apt-get install -y nodejs
 RUN apt-get install -y npm
 
-# RUN apt-get install -y libpng-dev
-# RUN apt-get install -y zlib1g-dev 
+# for aws-sdk-cpp
+RUN apt-get install -y curl
+RUN apt-get install -y libcurl4-openssl-dev
+RUN apt-get install -y libpulse-dev
+RUN apt-get install -y uuid-dev
+RUN apt-get install -y wget
+RUN apt-get install -y xz-utils
+RUN apt-get install -y zlib1g-dev
+RUN apt-get install -y unzip
 
+# RUN apt-get install -y libpng-dev
  
 # Build step
 # git clone https://github.com/emweb/wt.git wt && cd wt/ && mkdir build && cd build/ && cmake ../ && make && sudo make install
@@ -40,7 +46,56 @@ RUN cd wt/build/ && cmake ../ \
 
 RUN cd wt/build/ && make
 RUN cd wt/build/ && make install
-
 RUN rm -rf wt
 
 RUN cp /usr/local/lib/libwt*.so.* /usr/lib/
+
+# Build the aws SDK
+RUN git clone --depth 1 --shallow-submodules --recurse-submodules --branch 1.9.94 \
+        https://github.com/aws/aws-sdk-cpp.git /tmp/aws-sdk-cpp/ && \
+    mkdir -p /tmp/aws-sdk-cpp/build
+
+
+
+RUN git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp aws-sdk-cpp
+RUN mkdir aws-sdk-cpp/sdk-build
+RUN cd aws-sdk-cpp/sdk-build && \
+    cmake .. \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+    -DBUILD_ONLY="s3" \
+    -DENABLE_TESTING=OFF \
+    -DCMAKE_CXX_FLAGS="-Wno-error=deprecated-declarations"
+    
+RUN cd aws-sdk-cpp/sdk-build && cmake --build . --config=Debug
+RUN cd aws-sdk-cpp/sdk-build && cmake --install . --config=Debug
+RUN cd aws-sdk-cpp/sdk-build && make 
+RUN cd aws-sdk-cpp/sdk-build && make install
+
+# Install aws cli for authentification
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm -rf awscliv2.zip
+RUN rm -rf aws
+
+# RUN cd /tmp/aws-sdk-cpp/build && \
+#     cmake /tmp/aws-sdk-cpp \
+#         -DBUILD_ONLY="dynamodb;lambda;s3;sqs" \
+#         -DCMAKE_BUILD_TYPE=Debug \
+#         -DCPP_STANDARD=17 \
+#         -DENABLE_TESTING=OFF \
+#         -DCUSTOM_MEMORY_MANAGEMENT=OFF \
+#         -DCMAKE_INSTALL_PREFIX=/opt/aws-sdk-cpp-1.9/ \
+#         -DCMAKE_CXX_FLAGS="-Wno-error=deprecated-declarations"
+
+# RUN cd /tmp/aws-sdk-cpp/build && make 
+# RUN cd /tmp/aws-sdk-cpp/build && make install
+
+# RUN rm -rf /tmp/aws-sdk-cpp
+
+
+
+
+#  to se if the size of the image changes 
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
