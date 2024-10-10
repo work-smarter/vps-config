@@ -6,21 +6,6 @@ networks:
 
 services:
 
-  portainer:
-    image: portainer/portainer-ce:2.21.1
-    container_name: portainer
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./containers/portainer/portainer-data:/data
-    expose:
-      - 9000:9000
-    networks:
-      - caddy
-
   caddy:
     image: caddy:2.8-alpine
     restart: unless-stopped
@@ -34,6 +19,21 @@ services:
       - ./containers/caddy/site:/srv
       - ./containers/caddy/caddy_data:/data
       - ./containers/caddy/caddy_config:/config
+    networks:
+      - caddy
+
+  portainer:
+    image: portainer/portainer-ce:2.21.1
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./containers/portainer/portainer-data:/data
+    expose:
+      - 9000:9000
     networks:
       - caddy
 
@@ -52,25 +52,32 @@ services:
       - ${DOCKER_SOCK_GROUP_ID}
     networks:
       - caddy
-  # wt-frontend:
-  #   image: wt-frontend-web
-  #   container_name: wt-frontend-web
-  #   restart: unless-stopped
-  #   networks:
-  #     - caddy
-  #   ports:
-  #     - 9001:9001
 
-  # wt-cv:
-  #   image: wt-cv-web
-  #   container_name: wt-cv-web
-  #   restart: unless-stopped
-  #   networks:
-  #     - caddy
-  #   ports:
-  #     - 9002:9002
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ./containers/postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    networks:
+      - caddy
 
 volumes:
   caddy_data:
     external: true
   caddy_config:
+  postgres_data:
+    driver: local
