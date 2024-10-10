@@ -59,7 +59,7 @@ services:
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./containers/postgres_data:/var/lib/postgresql/data
     ports:
