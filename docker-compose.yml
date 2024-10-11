@@ -80,14 +80,14 @@ services:
       - ./containers/postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 1G
-        reservations:
-          cpus: '0.5'
-          memory: 512M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 1G
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 512M
     networks:
       - caddy
     healthcheck:
