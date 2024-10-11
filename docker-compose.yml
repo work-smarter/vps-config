@@ -53,11 +53,27 @@ services:
     networks:
       - caddy
 
+  # pgbackweb:
+  #   image: eduardolat/pgbackweb:latest
+  #   ports:
+  #     - "8085:8085" # Access the web interface at http://localhost:8085
+  #   volumes:
+  #     - ./containers/postgres_backups:/backups # If you only use S3 destinations, you don't need this volume
+  #   environment:
+  #     PBW_ENCRYPTION_KEY: "my_secret_key"
+  #     PBW_POSTGRES_CONN_STRING: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres?sslmode=disable"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   networks:
+  #     - caddy
+
   postgres:
     image: postgres:latest
     restart: always
     container_name: postgres
     environment:
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
@@ -74,6 +90,12 @@ services:
           memory: 512M
     networks:
       - caddy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 
 volumes:
   caddy_data:
